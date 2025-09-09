@@ -1,0 +1,134 @@
+[2025-09-09 14:49:15] glpi.WARNING:   *** Warning: Undefined array key "name" at CommonITILObject.php line 2824
+  Backtrace :
+  ./src/CommonITILObject.php:2824                    
+  ./src/Ticket.php:1487                              CommonITILObject->prepareInputForAdd()
+  ./src/CommonDBTM.php:1356                          Ticket->prepareInputForAdd()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:66 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:15] glpi.INFO:   *** Deprecated: ltrim(): Passing null to parameter #1 ($string) of type string is deprecated at CommonITILObject.php line 2824
+  Backtrace :
+  ./src/CommonITILObject.php:2824                    
+  ./src/Ticket.php:1487                              CommonITILObject->prepareInputForAdd()
+  ./src/CommonDBTM.php:1356                          Ticket->prepareInputForAdd()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:66 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:15] glpi.WARNING:   *** Warning: Undefined array key "name" at CommonITILObject.php line 2886
+  Backtrace :
+  ./src/CommonITILObject.php:2886                    
+  ./src/Ticket.php:1487                              CommonITILObject->prepareInputForAdd()
+  ./src/CommonDBTM.php:1356                          Ticket->prepareInputForAdd()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:66 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:15] glpi.INFO:   *** Deprecated: ltrim(): Passing null to parameter #1 ($string) of type string is deprecated at CommonITILObject.php line 2886
+  Backtrace :
+  ./src/CommonITILObject.php:2886                    
+  ./src/Ticket.php:1487                              CommonITILObject->prepareInputForAdd()
+  ./src/CommonDBTM.php:1356                          Ticket->prepareInputForAdd()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:66 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:17] glpi.WARNING:   *** Warning: Undefined array key "name" at CommonTreeDropdown.php line 152
+  Backtrace :
+  ./src/CommonTreeDropdown.php:152                   
+  ./src/CommonTreeDropdown.php:175                   CommonTreeDropdown->adaptTreeFieldsFromUpdateOrAdd()
+  ./src/CommonDBTM.php:1356                          CommonTreeDropdown->prepareInputForAdd()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:86 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:17] glpi.INFO:   *** Deprecated: trim(): Passing null to parameter #1 ($string) of type string is deprecated at CommonTreeDropdown.php line 152
+  Backtrace :
+  ./src/CommonTreeDropdown.php:152                   
+  ./src/CommonTreeDropdown.php:175                   CommonTreeDropdown->adaptTreeFieldsFromUpdateOrAdd()
+  ./src/CommonDBTM.php:1356                          CommonTreeDropdown->prepareInputForAdd()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:86 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:19] glpi.WARNING:   *** Warning: Undefined array key "status" at Controller.php line 230
+  Backtrace :
+  ./plugins/moreoptions/src/Controller.php:230       
+  ./src/Plugin.php:1707                              GlpiPlugin\Moreoptions\Controller::beforeCloseTicket()
+  ./src/CommonDBTM.php:1696                          Plugin::doHook()
+  ./src/Ticket.php:1963                              CommonDBTM->update()
+  ./src/CommonITILTask.php:820                       Ticket->updateDateMod()
+  ./src/CommonDBTM.php:1415                          CommonITILTask->post_addItem()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:95 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
+[2025-09-09 14:49:19] glpi.WARNING:   *** Warning: Undefined array key "status" at Controller.php line 231
+  Backtrace :
+  ./plugins/moreoptions/src/Controller.php:231       
+  ./src/Plugin.php:1707                              GlpiPlugin\Moreoptions\Controller::beforeCloseTicket()
+  ./src/CommonDBTM.php:1696                          Plugin::doHook()
+  ./src/Ticket.php:1963                              CommonDBTM->update()
+  ./src/CommonITILTask.php:820                       Ticket->updateDateMod()
+  ./src/CommonDBTM.php:1415                          CommonITILTask->post_addItem()
+  ...ugins/moreoptions/tests/units/ConfigTest.php:95 CommonDBTM->add()
+  ...phpunit/phpunit/src/Framework/TestCase.php:1656 GlpiPlugin\Moreoptions\Tests\Units\ConfigTest->testTaskMandatoryField()
+  .../phpunit/phpunit/src/Framework/TestCase.php:514 PHPUnit\Framework\TestCase->runTest()
+  ...unit/src/Framework/TestRunner/TestRunner.php:87 PHPUnit\Framework\TestCase->runBare()
+  .../phpunit/phpunit/src/Framework/TestCase.php:361 PHPUnit\Framework\TestRunner->run()
+  ...phpunit/phpunit/src/Framework/TestSuite.php:369 PHPUnit\Framework\TestCase->run()
+  ...or/phpunit/phpunit/src/TextUI/TestRunner.php:64 PHPUnit\Framework\TestSuite->run()
+  .../phpunit/phpunit/src/TextUI/Application.php:210 PHPUnit\TextUI\TestRunner->run()
+  ./vendor/phpunit/phpunit/phpunit:104               PHPUnit\TextUI\Application->run()
+  ./vendor/bin/phpunit:122                           include()
+
