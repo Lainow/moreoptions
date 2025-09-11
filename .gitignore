@@ -1,6 +1,7 @@
 dist/
 node_modules/
 vendor/
+tests/files/
 .gh_token
 *.min.*
 var

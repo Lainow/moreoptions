@@ -34,6 +34,7 @@ namespace GlpiPlugin\Moreoptions;
 
 use Change;
 use Change_Group;
+use Change_Item;
 use Change_User;
 use ChangeTask;
 use CommonDBTM;
@@ -43,9 +44,12 @@ use CommonITILValidation;
 use Glpi\Application\View\TemplateRenderer;
 use GlpiPlugin\Moreoptions\Config;
 use Group_Change;
+use Group_Item;
 use Group_Problem;
 use Group_Ticket;
 use Html;
+use Item_Problem;
+use Item_Ticket;
 use ITILSolution;
 use Planning;
 use Problem;
@@ -188,13 +192,11 @@ class Controller extends CommonDBTM
                 // Add type for assigned technicians
                 if ($actorType == \CommonITILActor::ASSIGN) {
                     $criteria['type'] = \CommonITILActor::ASSIGN;
+                } else {
+                    $criteria['type'] = \CommonITILActor::REQUESTER;
                 }
 
                 if (!$t_group->getFromDBByCrit($criteria)) {
-                    if ($actorType == \CommonITILActor::ASSIGN) {
-                        $criteria['type'] = \CommonITILActor::ASSIGN;
-                    }
-
                     $t_group->add($criteria);
                 }
             } else {
@@ -213,19 +215,12 @@ class Controller extends CommonDBTM
                     // Add type for assigned technicians
                     if ($actorType == \CommonITILActor::ASSIGN) {
                         $criteria['type'] = \CommonITILActor::ASSIGN;
+                    } else {
+                        $criteria['type'] = \CommonITILActor::REQUESTER;
                     }
 
                     if (!$t_group->getFromDBByCrit($criteria)) {
-                        $groupData = [
-                            'groups_id' => $ug['groups_id'],
-                            $idField => $object->fields['id'],
-                        ];
-
-                        if ($actorType == \CommonITILActor::ASSIGN) {
-                            $groupData['type'] = \CommonITILActor::ASSIGN;
-                        }
-
-                        $t_group->add($groupData);
+                        $t_group->add($criteria);
                     }
                 }
             }
@@ -384,4 +379,64 @@ class Controller extends CommonDBTM
             return $item->input = false;
         }
     }
+
+    public static function addItemGroups($item)
+    {
+        $conf = Config::getCurrentConfig();
+        if ($conf->fields['is_active'] != 1) {
+            return;
+        }
+
+        // Mapping des types d'items avec leurs configurations et classes
+        $itemMappings = [
+            Item_Ticket::class => [
+                'config_field' => 'take_item_group_ticket',
+                'group_class' => Group_Ticket::class,
+                'foreign_key' => 'tickets_id'
+            ],
+            Change_Item::class => [
+                'config_field' => 'take_item_group_change',
+                'group_class' => Change_Group::class,
+                'foreign_key' => 'changes_id'
+            ],
+            Item_Problem::class => [
+                'config_field' => 'take_item_group_problem',
+                'group_class' => Group_Problem::class,
+                'foreign_key' => 'problems_id'
+            ]
+        ];
+
+        $itemClass = get_class($item);
+
+        // Vérifier si l'item est supporté et la configuration est activée
+        if (!isset($itemMappings[$itemClass]) || $conf->fields[$itemMappings[$itemClass]['config_field']] != 1) {
+            return;
+        }
+
+        $mapping = $itemMappings[$itemClass];
+
+        // Récupérer les groupes associés à l'item
+        $gitems = new Group_Item();
+        $groups = $gitems->find([
+            'itemtype' => $item->fields['itemtype'],
+            'items_id' => $item->fields['items_id'],
+        ]);
+
+        // Ajouter chaque groupe au ticket/change/problem
+        foreach ($groups as $g) {
+            $groupClass = $mapping['group_class'];
+            $gitem = new $groupClass();
+
+            $criteria = [
+                'groups_id' => $g['groups_id'],
+                $mapping['foreign_key'] => $item->fields[$mapping['foreign_key']],
+                'type' => CommonITILActor::OBSERVER,
+            ];
+
+            if (!$gitem->getFromDBByCrit($criteria)) {
+                $gitem->add($criteria);
+            }
+        }
+    }
+
 }

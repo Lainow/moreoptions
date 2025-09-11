@@ -529,7 +529,7 @@ class ConfigTest extends TestCase
         $ticket = new \Ticket();
         $tid = $ticket->add(
             [
-                'content'          => 'Test ticket',
+                'name'          => 'Test ticket',
                 'content'       => 'Test content',
             ]
         );
