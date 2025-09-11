@@ -65,7 +65,7 @@ class ConfigTest extends TestCase
         $ticket = new \Ticket();
         $ticket->add(
             [
-                'content'          => 'Test ticket',
+                'name'          => 'Test ticket task mandatory fields',
                 'content'       => 'Test content',
             ]
         );
@@ -77,6 +77,7 @@ class ConfigTest extends TestCase
             [
                 'tickets_id'    => $ticket->getID(),
                 'content'          => 'Test task',
+                'state'             => \Planning::TODO
             ]
         );
         $this->assertFalse($result);
@@ -85,7 +86,7 @@ class ConfigTest extends TestCase
         $category = new \TaskCategory();
         $result = $category->add(
             [
-                'content' => 'Test category',
+                'name' => 'Test category',
             ]
         );
         $this->assertNotFalse($result);
@@ -100,6 +101,7 @@ class ConfigTest extends TestCase
                 'users_id_tech'      => 1,
                 'groups_id_tech'     => 1,
                 'actiontime'         => 300,
+                'state'             => \Planning::TODO
             ]
         );
         $this->assertNotFalse($result);
@@ -113,6 +115,7 @@ class ConfigTest extends TestCase
                 'taskcategories_id' => 1,
                 'groups_id_tech'     => 1,
                 'actiontime'         => 300,
+                'state'             => \Planning::TODO
             ]
         );
         $this->assertFalse($result);
@@ -126,6 +129,7 @@ class ConfigTest extends TestCase
                 'taskcategories_id' => 1,
                 'users_id_tech'      => 1,
                 'actiontime'         => 300,
+                'state'             => \Planning::TODO
             ]
         );
         $this->assertFalse($result);
@@ -139,6 +143,7 @@ class ConfigTest extends TestCase
                 'taskcategories_id' => 1,
                 'users_id_tech'      => 1,
                 'groups_id_tech'     => 1,
+                'state'             => \Planning::TODO
             ]
         );
         $this->assertFalse($result);
@@ -152,6 +157,7 @@ class ConfigTest extends TestCase
                 'users_id_tech'      => 1,
                 'groups_id_tech'     => 1,
                 'actiontime'         => 300,
+                'state'             => \Planning::TODO
             ]
         );
         $this->assertFalse($result);
@@ -160,5 +166,432 @@ class ConfigTest extends TestCase
         $tasks = new \TicketTask();
         $tasks = count($tasks->find(['tickets_id' => $ticket->getID()]));
         $this->assertEquals(1, $tasks);
+
+        // Reset config
+        $input = [
+            'id'                        => $conf->getID(),
+            'mandatory_task_category'   => 0,
+            'mandatory_task_duration'   => 0,
+            'mandatory_task_user'       => 0,
+            'mandatory_task_group'      => 0,
+        ];
+        $this->assertTrue($config->update($input));
+    }
+
+    /**
+     * @test
+     */
+    public function testTicketMandatoryFieldsBeforeClose()
+    {
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        $config = new Config();
+        $input = [
+            'id'                        => $conf->getID(),
+            'is_active'                 => 1,
+            'entities_id'               => 0,
+            'require_technician_to_close_ticket'   => 1,
+            'require_technicians_group_to_close_ticket'   => 1,
+            'require_category_to_close_ticket'       => 1,
+            'require_location_to_close_ticket'      => 1,
+            //require_solution_to_close_ticket       => 1,
+        ];
+
+        $this->assertTrue($config->update($input));
+
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        //Create a ticket without mandatory fields (Expected to succeed)
+        $ticket = new \Ticket();
+        $tid = $ticket->add(
+            [
+                'name'          => 'Test ticket close',
+                'content'       => 'Test content',
+            ]
+        );
+        $this->assertGreaterThan(0, $tid);
+
+        $ticket = new \Ticket();
+        $this->assertTrue($ticket->update(
+            [
+                'id'                => $tid,
+                'status'            => \Ticket::SOLVED,
+                'itilcategories_id' => 1, // Default category
+            ]
+        ));
+
+        // Create group
+        $group = new \Group();
+        $gid = $group->add(
+            [
+                'name' => 'Test group close ticket',
+            ]
+        );
+        $this->assertNotFalse($gid);
+
+        // Close the ticket without mandatory fields (Expected to fail)
+        $ticket = new \Ticket();
+        $this->assertTrue($ticket->getFromDB($tid));
+        $result = $ticket->update(
+            [
+                'id'          => $tid,
+                'status'      => \Ticket::CLOSED,
+            ]
+        );
+        $this->assertFalse($result);
+
+        // Create category
+        $category = new \ITILCategory();
+        $cid = $category->add(
+            [
+                'name' => 'Test category close ticket',
+            ]
+        );
+        $this->assertNotFalse($cid);
+
+        // Create location
+        $location = new \Location();
+        $lid = $location->add(
+            [
+                'name' => 'Test location close ticket',
+            ]
+        );
+        $this->assertNotFalse($lid);
+
+        // Add actors to the ticket
+        $gticket = new \Group_Ticket();
+        $this->assertNotFalse($gticket->add(
+            [
+                'tickets_id' => $tid,
+                'groups_id'  => $gid,
+                'type'       => \Group_Ticket::ASSIGN,
+            ]
+        ));
+
+        $user = new \User();
+        $this->assertTrue($user->getFromDBByCrit(
+            [
+                'name' => 'glpi',
+            ]
+        ));
+
+        $uticket = new \Ticket_User();
+        $this->assertNotFalse($uticket->add(
+            [
+                'tickets_id' => $tid,
+                'users_id'   => $user->getID(),
+                'type'       => \Ticket_User::ASSIGN,
+            ]
+        ));
+
+        // Close the ticket without mandatory fields (Expected to fail)
+        $ticket = new \Ticket();
+        $this->assertFalse($ticket->update(
+            [
+                'id'          => $tid,
+                'status'      => \Ticket::CLOSED,
+            ]
+        ));
+        $this->assertFalse($result);
+
+        // Close the ticket with all mandatory fields (Expected to succeed)
+        $ticket = new \Ticket();
+        $result = $ticket->update(
+            [
+                'id'                => $tid,
+                'name'              => 'Test ticket close - updated',
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        // Reset config
+        $input = [
+            'id'                                            => $conf->getID(),
+            'require_technician_to_close_ticket'            => 0,
+            'require_technicians_group_to_close_ticket'     => 0,
+            'require_category_to_close_ticket'              => 0,
+            'require_location_to_close_ticket'              => 0,
+        ];
+        $this->assertTrue($config->update($input));
+    }
+
+    /**
+     * @test
+     */
+    public function testTakeTheRequesterGroup()
+    {
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        $config = new Config();
+        $input = [
+            'id'                               => $conf->getID(),
+            'is_active'                        => 1,
+            'entities_id'                      => 0,
+            'take_requester_group_ticket'      => 2, // All
+        ];
+
+        $this->assertTrue($config->update($input));
+
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        // Create two groups
+        $group1 = new \Group();
+        $result = $group1->add(
+            [
+                'name' => 'Test group 1',
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        $group2 = new \Group();
+        $result = $group2->add(
+            [
+                'name' => 'Test group 2',
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        // Get the user glpi
+        $user = new \User();
+        $this->assertTrue($user->getFromDBByCrit(
+            [
+                'name' => 'glpi',
+            ]
+        ));
+
+        // Assign the user to the group
+        $group_user = new \Group_User();
+        $result = $group_user->add(
+            [
+                'groups_id' => $group1->getID(),
+                'users_id'  => $user->getID(),
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        $result = $group_user->add(
+            [
+                'groups_id' => $group2->getID(),
+                'users_id'  => $user->getID(),
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        //Create a ticket
+        $ticket = new \Ticket();
+        $tid= $ticket->add(
+            [
+                'name'          => 'Test ticket requester group',
+                'content'       => 'Test content',
+            ]
+        );
+        $this->assertGreaterThan(0, $tid);
+
+        $uticket = new \Ticket_User();
+        $this->assertNotFalse($uticket->add(
+            [
+                'tickets_id' => $tid,
+                'users_id'   => $user->getID(),
+                'type'       => \Ticket_User::REQUESTER,
+            ]
+        ));
+
+        // Check if the group of the requester is in the actors
+        $ticket_group = new \Group_Ticket();
+        $groups = $ticket_group->find(['tickets_id' => $ticket->getID()]);
+        $this->assertCount(2, $groups);
+
+        $config = new Config();
+        $input = [
+            'id'                               => $conf->getID(),
+            'is_active'                        => 1,
+            'entities_id'                      => 0,
+            'take_requester_group_ticket'     => 1, // Default
+        ];
+
+        $this->assertTrue($config->update($input));
+
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        //Create a ticket
+        $ticket = new \Ticket();
+        $tid = $ticket->add(
+            [
+                'name'          => 'Test ticket requester group - 2',
+                'content'       => 'Test content',
+            ]
+        );
+        $this->assertNotFalse($ticket->getID());
+
+        //Add default group to the user
+        $user2 = new \User();
+        $this->assertTrue($user2->update(
+            [
+                'id'   => $user->getID(),
+                'groups_id' => $group1->getID(),
+            ]
+        ));
+
+        $uticket = new \Ticket_User();
+        $this->assertNotFalse($uticket->add(
+            [
+                'tickets_id' => $tid,
+                'users_id'   => $user2->getID(),
+                'type'       => \Ticket_User::REQUESTER,
+            ]
+        ));
+
+        // Check if the group of the requester is in the actors
+        $ticket_group = new \Group_Ticket();
+        $groups = $ticket_group->find(['tickets_id' => $tid]);
+        $this->assertCount(1, $groups);
+
+        // Reset config
+        $input = [
+            'id'                               => $conf->getID(),
+            'is_active'                        => 1,
+            'entities_id'                      => 0,
+            'take_requester_group_ticket'      => 0, // Default
+        ];
+        $this->assertTrue($config->update($input));
+    }
+
+    /**
+     * @test
+     */
+    public function testTakeTheTechnicianGroup()
+    {
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        $config = new Config();
+        $input = [
+            'id'                               => $conf->getID(),
+            'is_active'                        => 1,
+            'entities_id'                      => 0,
+            'take_technician_group_ticket'     => 2, // All
+        ];
+
+        $this->assertTrue($config->update($input));
+
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        // Create two groups
+        $group1 = new \Group();
+        $result = $group1->add(
+            [
+                'name' => 'Test group 1',
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        $group2 = new \Group();
+        $result = $group2->add(
+            [
+                'name' => 'Test group 2',
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        // Get the user tech
+        $user = new \User();
+        $this->assertTrue($user->getFromDBByCrit(
+            [
+                'name' => 'tech',
+            ]
+        ));
+
+        // Assign the user to the group
+        $group_user = new \Group_User();
+        $result = $group_user->add(
+            [
+                'groups_id' => $group1->getID(),
+                'users_id'  => $user->getID(),
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        $result = $group_user->add(
+            [
+                'groups_id' => $group2->getID(),
+                'users_id'  => $user->getID(),
+            ]
+        );
+        $this->assertNotFalse($result);
+
+        //Create a ticket
+        $ticket = new \Ticket();
+        $tid = $ticket->add(
+            [
+                'content'          => 'Test ticket',
+                'content'       => 'Test content',
+            ]
+        );
+        $this->assertNotFalse($ticket->getID());
+
+        $uticket = new \Ticket_User();
+        $this->assertNotFalse($uticket->add(
+            [
+                'tickets_id' => $tid,
+                'users_id'   => $user->getID(),
+                'type'       => \Ticket_User::ASSIGN,
+            ]
+        ));
+
+        // Check if the group of the requester is in the actors
+        $ticket_group = new \Group_Ticket();
+        $groups = $ticket_group->find(['tickets_id' => $ticket->getID()]);
+        $this->assertCount(2, $groups);
+
+        $config = new Config();
+        $input = [
+            'id'                               => $conf->getID(),
+            'is_active'                        => 1,
+            'entities_id'                      => 0,
+            'take_technician_group_ticket'      => 1, // Default
+        ];
+        $this->assertTrue($config->update($input));
+
+        $conf = Config::getCurrentConfig();
+        $this->assertNotNull($conf);
+
+        //Create a ticket
+        $ticket = new \Ticket();
+        $tid = $ticket->add(
+            [
+                'name'          => 'Test ticket tech group - 2',
+                'content'       => 'Test content',
+            ]
+        );
+        $this->assertNotFalse($ticket->getID());
+
+        //Add default group to the user
+        $user2 = new \User();
+        $this->assertTrue($user2->update(
+            [
+                'id'   => $user->getID(),
+                'groups_id' => $group1->getID(),
+            ]
+        ));
+
+        $uticket = new \Ticket_User();
+        $this->assertNotFalse($uticket->add(
+            [
+                'tickets_id' => $tid,
+                'users_id'   => $user2->getID(),
+                'type'       => \Ticket_User::ASSIGN,
+            ]
+        ));
+
+        // Check if the group of the requester is in the actors
+        $ticket_group = new \Group_Ticket();
+        $groups = $ticket_group->find(['tickets_id' => $ticket->getID()]);
+        $this->assertCount(1, $groups);
     }
 }

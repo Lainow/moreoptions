@@ -133,11 +133,19 @@ class Controller extends CommonDBTM
     }
 
     /**
-     * Ajoute les groupes d'un type d'acteur donné au ticket/change/problem
+     * Add groups for an actor type
+     *
+     * @param CommonITILActor $item
+     * @param Config $moconfig
+     * @param int $actorType
+     * @param string $configField
+     * @param string $itemType
+     *
+     * @return void
      */
     private static function addGroupsForActorType($item, $moconfig, $actorType, $configField, $itemType)
     {
-        // Déterminer le type d'objet et les classes appropriées
+        // Init variables based on item type
         switch ($itemType) {
             case 'Ticket':
                 $object = new Ticket();
@@ -162,13 +170,13 @@ class Controller extends CommonDBTM
 
         $actors = $object->getActorsForType($actorType);
         foreach ($actors as $actor) {
-            // Ne garder que les acteurs de type User
+            // Only keep actors of type User
             if ($actor['itemtype'] !== 'User') {
                 continue;
             }
 
             if ($moconfig->fields[$configField] == 1) {
-                // Utiliser le groupe principal de l'utilisateur
+                // Use the user's primary group
                 $user = new User();
                 $user->getFromDB($actor['items_id']);
                 $t_group = new $groupClass();
@@ -177,7 +185,7 @@ class Controller extends CommonDBTM
                     $idField => $object->fields['id']
                 ];
 
-                // Ajouter le type pour les techniciens assignés
+                // Add type for assigned technicians
                 if ($actorType == \CommonITILActor::ASSIGN) {
                     $criteria['type'] = \CommonITILActor::ASSIGN;
                 }
@@ -190,7 +198,7 @@ class Controller extends CommonDBTM
                     $t_group->add($criteria);
                 }
             } else {
-                // Utiliser tous les groupes de l'utilisateur
+                // Use all user groups
                 $users_groups = new \Group_User();
                 $u_groups = $users_groups->find([
                     'users_id' => $actor['items_id'],
@@ -202,7 +210,7 @@ class Controller extends CommonDBTM
                         $idField => $object->fields['id']
                     ];
 
-                    // Ajouter le type pour les techniciens assignés
+                    // Add type for assigned technicians
                     if ($actorType == \CommonITILActor::ASSIGN) {
                         $criteria['type'] = \CommonITILActor::ASSIGN;
                     }
@@ -227,10 +235,13 @@ class Controller extends CommonDBTM
     public static function beforeCloseTicket($item)
     {
         if (
-            $item->input['status'] == CommonITILObject::CLOSED
-            || $item->input['status'] == CommonITILObject::SOLVED
-            || $item->fields['status'] == CommonITILObject::CLOSED
-            || $item->fields['status'] == CommonITILObject::SOLVED
+            isset($item->input['status'])
+            && (
+                $item->input['status'] == CommonITILObject::CLOSED
+                || $item->input['status'] == CommonITILObject::SOLVED
+                || $item->fields['status'] == CommonITILObject::CLOSED
+                || $item->fields['status'] == CommonITILObject::SOLVED
+            )
         ) {
             self::requireFieldsToClose($item);
             self::preventClosure($item);
@@ -296,7 +307,7 @@ class Controller extends CommonDBTM
             $group = new Group_Ticket();
             $groups = $group->find([
                 'tickets_id' => $item->fields['id'],
-                'type'       => Ticket_User::ASSIGN,
+                'type'       => Group_Ticket::ASSIGN,
             ]);
             if (count($groups) == 0) {
                 $message .= '- ' . __('Technician group') . '<br>';
