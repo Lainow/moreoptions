@@ -38,6 +38,7 @@ define('TU_USER', 'glpi');
 define('TU_PASS', 'glpi');
 define('GLPI_LOG_DIR', __DIR__ . '/files/_logs');
 
+require_once __DIR__ . '/MoreOptionsTestCase.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 $kernel = new Kernel(Environment::TESTING->value);

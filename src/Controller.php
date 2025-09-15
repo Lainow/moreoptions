@@ -309,12 +309,12 @@ class Controller extends CommonDBTM
             }
         }
         if ($conf->fields['require_category_to_close_ticket'] == 1) {
-            if ((isset($item->input['itilcategories_id']) && empty($item->input['itilcategories_id']))) {
+            if ((!isset($item->input['itilcategories_id']) || empty($item->input['itilcategories_id']))) {
                 $message .= '- ' . __('Category') . '<br>';
             }
         }
         if ($conf->fields['require_location_to_close_ticket'] == 1) {
-            if ((isset($item->input['locations_id']) && empty($item->input['locations_id']))) {
+            if ((!isset($item->input['locations_id']) || empty($item->input['locations_id']))) {
                 $message .= '- ' . __('Location') . '<br>';
             }
         }
