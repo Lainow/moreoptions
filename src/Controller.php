@@ -2,29 +2,35 @@
 
 /**
  * -------------------------------------------------------------------------
- * More Options plugin for GLPI
+ * MoreOptions plugin for GLPI
  * -------------------------------------------------------------------------
  *
- * LICENSE
+ * MIT License
  *
- * This file is part of More Options.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * More Options is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- * More Options is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with More Options. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2025 by the MoreOptions plugin team.
  * @copyright Copyright (C) 2022-2024 by More Options plugin team.
  * @copyright Copyright (C) 2022-2024 by Cloud Inventory plugin team.
+ * @license   MIT https://opensource.org/licenses/mit-license.php
  * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ * @link      https://github.com/pluginsGLPI/moreoptions
  * @link      https://gitlab.teclib.com/glpi-network/cancelsend/
  * @link      https://gitlab.teclib.com/glpi-network/cloudinventory/
  * -------------------------------------------------------------------------
@@ -97,7 +103,7 @@ class Controller extends CommonDBTM
                     if ($moconfig->fields['take_requester_group_ticket'] != 0) {
                         self::addGroupsForActorType($item, $moconfig, \CommonITILActor::REQUESTER, 'take_requester_group_ticket', 'Ticket');
                     }
-                } else if ($item->fields['type'] == \CommonITILActor::ASSIGN) {
+                } elseif ($item->fields['type'] == \CommonITILActor::ASSIGN) {
                     if ($moconfig->fields['take_technician_group_ticket'] != 0) {
                         self::addGroupsForActorType($item, $moconfig, \CommonITILActor::ASSIGN, 'take_technician_group_ticket', 'Ticket');
                     }
@@ -111,7 +117,7 @@ class Controller extends CommonDBTM
                     if ($moconfig->fields['take_requester_group_change'] != 0) {
                         self::addGroupsForActorType($item, $moconfig, \CommonITILActor::REQUESTER, 'take_requester_group_change', 'Change');
                     }
-                } else if ($item->fields['type'] == \CommonITILActor::ASSIGN) {
+                } elseif ($item->fields['type'] == \CommonITILActor::ASSIGN) {
                     if ($moconfig->fields['take_technician_group_change'] != 0) {
                         self::addGroupsForActorType($item, $moconfig, \CommonITILActor::ASSIGN, 'take_technician_group_change', 'Change');
                     }
@@ -125,7 +131,7 @@ class Controller extends CommonDBTM
                     if ($moconfig->fields['take_requester_group_problem'] != 0) {
                         self::addGroupsForActorType($item, $moconfig, \CommonITILActor::REQUESTER, 'take_requester_group_problem', 'Problem');
                     }
-                } else if ($item->fields['type'] == \CommonITILActor::ASSIGN) {
+                } elseif ($item->fields['type'] == \CommonITILActor::ASSIGN) {
                     if ($moconfig->fields['take_technician_group_problem'] != 0) {
                         self::addGroupsForActorType($item, $moconfig, \CommonITILActor::ASSIGN, 'take_technician_group_problem', 'Problem');
                     }
@@ -186,7 +192,7 @@ class Controller extends CommonDBTM
                 $t_group = new $groupClass();
                 $criteria = [
                     'groups_id' => $user->fields['groups_id'],
-                    $idField => $object->fields['id']
+                    $idField => $object->fields['id'],
                 ];
 
                 // Add type for assigned technicians
@@ -209,7 +215,7 @@ class Controller extends CommonDBTM
                     $t_group = new $groupClass();
                     $criteria = [
                         'groups_id' => $ug['groups_id'],
-                        $idField => $object->fields['id']
+                        $idField => $object->fields['id'],
                     ];
 
                     // Add type for assigned technicians
@@ -392,18 +398,18 @@ class Controller extends CommonDBTM
             Item_Ticket::class => [
                 'config_field' => 'take_item_group_ticket',
                 'group_class' => Group_Ticket::class,
-                'foreign_key' => 'tickets_id'
+                'foreign_key' => 'tickets_id',
             ],
             Change_Item::class => [
                 'config_field' => 'take_item_group_change',
                 'group_class' => Change_Group::class,
-                'foreign_key' => 'changes_id'
+                'foreign_key' => 'changes_id',
             ],
             Item_Problem::class => [
                 'config_field' => 'take_item_group_problem',
                 'group_class' => Group_Problem::class,
-                'foreign_key' => 'problems_id'
-            ]
+                'foreign_key' => 'problems_id',
+            ],
         ];
 
         $itemClass = get_class($item);

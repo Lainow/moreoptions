@@ -2,29 +2,35 @@
 
 /**
  * -------------------------------------------------------------------------
- * More Options plugin for GLPI
+ * MoreOptions plugin for GLPI
  * -------------------------------------------------------------------------
  *
- * LICENSE
+ * MIT License
  *
- * This file is part of More Options.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * More Options is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- * More Options is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with More Options. If not, see <http://www.gnu.org/licenses/>.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  * -------------------------------------------------------------------------
+ * @copyright Copyright (C) 2025 by the MoreOptions plugin team.
  * @copyright Copyright (C) 2022-2024 by More Options plugin team.
  * @copyright Copyright (C) 2022-2024 by Cloud Inventory plugin team.
+ * @license   MIT https://opensource.org/licenses/mit-license.php
  * @license   GPLv3 https://www.gnu.org/licenses/gpl-3.0.html
+ * @link      https://github.com/pluginsGLPI/moreoptions
  * @link      https://gitlab.teclib.com/glpi-network/cancelsend/
  * @link      https://gitlab.teclib.com/glpi-network/cloudinventory/
  * -------------------------------------------------------------------------
@@ -64,7 +70,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'name'          => 'Test ticket task mandatory fields',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertNotFalse($ticket->getID());
 
@@ -74,8 +80,8 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'tickets_id'    => $ticket->getID(),
                 'content'          => 'Test task',
-                'state'             => \Planning::TODO
-            ]
+                'state'             => \Planning::TODO,
+            ],
         );
         $this->assertFalse($result);
 
@@ -84,7 +90,7 @@ class ConfigTest extends MoreOptionsTestCase
         $result = $category->add(
             [
                 'name' => 'Test category',
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -98,8 +104,8 @@ class ConfigTest extends MoreOptionsTestCase
                 'users_id_tech'      => 1,
                 'groups_id_tech'     => 1,
                 'actiontime'         => 300,
-                'state'             => \Planning::TODO
-            ]
+                'state'             => \Planning::TODO,
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -112,8 +118,8 @@ class ConfigTest extends MoreOptionsTestCase
                 'taskcategories_id' => 1,
                 'groups_id_tech'     => 1,
                 'actiontime'         => 300,
-                'state'             => \Planning::TODO
-            ]
+                'state'             => \Planning::TODO,
+            ],
         );
         $this->assertFalse($result);
 
@@ -126,8 +132,8 @@ class ConfigTest extends MoreOptionsTestCase
                 'taskcategories_id' => 1,
                 'users_id_tech'      => 1,
                 'actiontime'         => 300,
-                'state'             => \Planning::TODO
-            ]
+                'state'             => \Planning::TODO,
+            ],
         );
         $this->assertFalse($result);
 
@@ -140,8 +146,8 @@ class ConfigTest extends MoreOptionsTestCase
                 'taskcategories_id' => 1,
                 'users_id_tech'      => 1,
                 'groups_id_tech'     => 1,
-                'state'             => \Planning::TODO
-            ]
+                'state'             => \Planning::TODO,
+            ],
         );
         $this->assertFalse($result);
 
@@ -154,8 +160,8 @@ class ConfigTest extends MoreOptionsTestCase
                 'users_id_tech'      => 1,
                 'groups_id_tech'     => 1,
                 'actiontime'         => 300,
-                'state'             => \Planning::TODO
-            ]
+                'state'             => \Planning::TODO,
+            ],
         );
         $this->assertFalse($result);
 
@@ -204,7 +210,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'name'          => 'Test ticket close',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertGreaterThan(0, $tid);
 
@@ -213,7 +219,7 @@ class ConfigTest extends MoreOptionsTestCase
         $gid = $group->add(
             [
                 'name' => 'Test group close ticket',
-            ]
+            ],
         );
         $this->assertNotFalse($gid);
 
@@ -223,7 +229,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'id'          => $tid,
                 'status'      => \Ticket::CLOSED,
-            ]
+            ],
         );
         $this->assertFalse($result);
 
@@ -232,7 +238,7 @@ class ConfigTest extends MoreOptionsTestCase
         $cid = $category->add(
             [
                 'name' => 'Test category close ticket',
-            ]
+            ],
         );
         $this->assertNotFalse($cid);
 
@@ -241,7 +247,7 @@ class ConfigTest extends MoreOptionsTestCase
         $lid = $location->add(
             [
                 'name' => 'Test location close ticket',
-            ]
+            ],
         );
         $this->assertNotFalse($lid);
 
@@ -252,7 +258,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'groups_id'  => $gid,
                 'type'       => \Group_Ticket::ASSIGN,
-            ]
+            ],
         ));
 
         // Add technician to the ticket
@@ -260,7 +266,7 @@ class ConfigTest extends MoreOptionsTestCase
         $this->assertTrue($user->getFromDBByCrit(
             [
                 'name' => 'glpi',
-            ]
+            ],
         ));
 
         $uticket = new \Ticket_User();
@@ -269,7 +275,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'users_id'   => $user->getID(),
                 'type'       => \Ticket_User::ASSIGN,
-            ]
+            ],
         ));
 
         // Close the ticket without location and category (Expected to fail)
@@ -278,7 +284,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'id'                => $tid,
                 'status'            => \Ticket::CLOSED,
-            ]
+            ],
         ));
 
         // Close the ticket with location and category (Expected to succeed)
@@ -289,7 +295,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'locations_id'     => $lid,
                 'itilcategories_id' => $cid,
                 'status'            => \Ticket::CLOSED,
-            ]
+            ],
         ));
 
         // Reset config
@@ -326,7 +332,7 @@ class ConfigTest extends MoreOptionsTestCase
         $result = $group1->add(
             [
                 'name' => 'Test group 1',
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -334,7 +340,7 @@ class ConfigTest extends MoreOptionsTestCase
         $result = $group2->add(
             [
                 'name' => 'Test group 2',
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -343,7 +349,7 @@ class ConfigTest extends MoreOptionsTestCase
         $this->assertTrue($user->getFromDBByCrit(
             [
                 'name' => 'glpi',
-            ]
+            ],
         ));
 
         // Assign the user to the group
@@ -352,7 +358,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'groups_id' => $group1->getID(),
                 'users_id'  => $user->getID(),
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -360,17 +366,17 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'groups_id' => $group2->getID(),
                 'users_id'  => $user->getID(),
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
         //Create a ticket
         $ticket = new \Ticket();
-        $tid= $ticket->add(
+        $tid = $ticket->add(
             [
                 'name'          => 'Test ticket requester group',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertGreaterThan(0, $tid);
 
@@ -380,7 +386,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'users_id'   => $user->getID(),
                 'type'       => \Ticket_User::REQUESTER,
-            ]
+            ],
         ));
 
         // Check if the group of the requester is in the actors
@@ -406,7 +412,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'name'          => 'Test ticket requester group - 2',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertNotFalse($ticket->getID());
 
@@ -416,7 +422,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'id'   => $user->getID(),
                 'groups_id' => $group1->getID(),
-            ]
+            ],
         ));
 
         $uticket = new \Ticket_User();
@@ -425,7 +431,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'users_id'   => $user2->getID(),
                 'type'       => \Ticket_User::REQUESTER,
-            ]
+            ],
         ));
 
         // Check if the group of the requester is in the actors
@@ -467,7 +473,7 @@ class ConfigTest extends MoreOptionsTestCase
         $result = $group1->add(
             [
                 'name' => 'Test group 1',
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -475,7 +481,7 @@ class ConfigTest extends MoreOptionsTestCase
         $result = $group2->add(
             [
                 'name' => 'Test group 2',
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -484,7 +490,7 @@ class ConfigTest extends MoreOptionsTestCase
         $this->assertTrue($user->getFromDBByCrit(
             [
                 'name' => 'tech',
-            ]
+            ],
         ));
 
         // Assign the user to the group
@@ -493,7 +499,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'groups_id' => $group1->getID(),
                 'users_id'  => $user->getID(),
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -501,7 +507,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'groups_id' => $group2->getID(),
                 'users_id'  => $user->getID(),
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -511,7 +517,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'name'          => 'Test ticket',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertNotFalse($ticket->getID());
 
@@ -521,7 +527,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'users_id'   => $user->getID(),
                 'type'       => \Ticket_User::ASSIGN,
-            ]
+            ],
         ));
 
         // Check if the group of the requester is in the actors
@@ -546,7 +552,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'name'          => 'Test ticket tech group - 2',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertNotFalse($ticket->getID());
 
@@ -556,7 +562,7 @@ class ConfigTest extends MoreOptionsTestCase
             [
                 'id'   => $user->getID(),
                 'groups_id' => $group1->getID(),
-            ]
+            ],
         ));
 
         $uticket = new \Ticket_User();
@@ -565,7 +571,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'users_id'   => $user2->getID(),
                 'type'       => \Ticket_User::ASSIGN,
-            ]
+            ],
         ));
 
         // Check if the group of the requester is in the actors
@@ -598,7 +604,7 @@ class ConfigTest extends MoreOptionsTestCase
         $result = $group1->add(
             [
                 'name' => 'Test group 1',
-            ]
+            ],
         );
         $this->assertNotFalse($result);
 
@@ -607,7 +613,7 @@ class ConfigTest extends MoreOptionsTestCase
         $cid = $computer->add(
             [
                 'name' => 'Test computer',
-            ]
+            ],
         );
         $this->assertNotFalse($cid);
 
@@ -618,17 +624,17 @@ class ConfigTest extends MoreOptionsTestCase
                 'items_id'   => $computer->getID(),
                 'itemtype'   => \Computer::class,
                 'groups_id'  => $group1->getID(),
-                'type'       => 1
-            ]
+                'type'       => 1,
+            ],
         ));
 
         //Create a ticket
         $ticket = new \Ticket();
-        $tid= $ticket->add(
+        $tid = $ticket->add(
             [
                 'name'          => 'Test ticket item groups',
                 'content'       => 'Test content',
-            ]
+            ],
         );
         $this->assertGreaterThan(0, $tid);
 
@@ -639,7 +645,7 @@ class ConfigTest extends MoreOptionsTestCase
                 'tickets_id' => $tid,
                 'items_id'   => $computer->getID(),
                 'itemtype'   => \Computer::class,
-            ]
+            ],
         ));
 
         // Check if the groups are in the actors
@@ -647,8 +653,8 @@ class ConfigTest extends MoreOptionsTestCase
         $groups = $ticket_group->find(
             [
                 'tickets_id' => $ticket->getID(),
-                'type' => \CommonITILActor::OBSERVER
-            ]
+                'type' => \CommonITILActor::OBSERVER,
+            ],
         );
         $this->assertCount(1, $groups);
     }
